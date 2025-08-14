@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veterinaria Yeraldin Orozco</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to bottom right, #00bfa5, #00796b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+  }
+
+  .container {
+    width: 95%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+  .logo {
+    width: 100px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    border: 2px solid #00796b;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    color: #00796b;
+  }
+
+  input, button {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+  }
+
+  input:focus { border-color: #00796b; outline: none; box-shadow: 0 0 5px #00bfa5; }
+
+  button {
+    background: #00796b;
+    color: white;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover { background: #004d40; }
+
+  #mensaje { margin-top: 15px; font-weight: bold; color: #00796b; }
+
+  @media(max-width: 400px){
+    .container { padding: 20px; border-radius: 20px; }
+    input, button { padding: 12px; font-size: 14px; }
+    h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img src="https://i.imgur.com/2i8TMmf.jpeg" class="logo" alt="Logo Veterinaria">
+  <h2>Registro de Visita Veterinaria</h2>
+  <form id="miFormulario">
+    <input id="propietario" type="text" placeholder="Propietario" required>
+    <input id="cedula" type="text" placeholder="Cédula" required>
+    <input id="celular" type="text" placeholder="Celular" required>
+    <input id="direccion" type="text" placeholder="Dirección" required>
+    <input id="municipio" type="text" placeholder="Municipio" required>
+    <input id="fecha" type="date" required>
+    <input id="visita_no" type="number" placeholder="Número de visita">
+    <input id="mascota" type="text" placeholder="Mascota" required>
+    <input id="raza" type="text" placeholder="Raza" required>
+    <input id="color" type="text" placeholder="Color" required>
+    <input id="motivo" type="text" placeholder="Motivo de la visita" required>
+    <button type="submit">Enviar Datos</button>
+  </form>
+  <p id="mensaje"></p>
+</div>
+
+<script>
+const URL_EXEC = "https://script.google.com/macros/s/AKfycbwq7pctWdCSt_REgsT3RN0Sba4TEJz1GiJH-ZGflFBcHwUE0Bv_reqrOBW9ySUeitrnow/exec"; // Pega aquí tu URL /exec
+
+document.getElementById("miFormulario").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const data = {
+    propietario: document.getElementById("propietario").value,
+    cedula: document.getElementById("cedula").value,
+    celular: document.getElementById("celular").value,
+    Direccion: document.getElementById("direccion").value,
+    Municipio: document.getElementById("municipio").value,
+    Fecha_de_visita: document.getElementById("fecha").value,
+    visita_no: document.getElementById("visita_no").value,
+    Mascota: document.getElementById("mascota").value,
+    Raza: document.getElementById("raza").value,
+    Color: document.getElementById("color").value,
+    motivo_de_la_VISITA: document.getElementById("motivo").value
+  };
+
+  fetch(URL_EXEC, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.json())
+  .then(res => {
+    if(res.status === "ok"){
+      document.getElementById("mensaje").textContent = "✅ Datos enviados correctamente";
+      document.getElementById("miFormulario").reset();
+    } else {
+      document.getElementById("mensaje").textContent = "❌ Error: " + res.message;
+    }
+  })
+  .catch(() => {
+    document.getElementById("mensaje").textContent = "❌ Error al enviar los datos";
+  });
+});
+</script>
+
+</body>
+</html>
